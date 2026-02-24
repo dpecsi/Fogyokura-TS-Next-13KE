@@ -1,53 +1,73 @@
-"use client";
+// for-in ciklussal
+export function célElérve(cél: number, mérések: number[]): number {
+  for (const i in mérések) {
+    const index: number = Number(i);
+    const mértÉrték: number = mérések[i];
+    if (mértÉrték <= cél) return index + 1;
+  }
+  return 0; // ha a célt nem érte el Mari néni
+}
 
-import { clsx } from "clsx";
-import dayjs from "dayjs";
-import { SunMoon } from "lucide-react";
-import Image from "next/image";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
-import { useGlobalStore } from "@/store/globalStore";
+// for-of ciklussal
+export function célElérve2(cél: number, mérések: number[]): number {
+  for (const [i, e] of mérések.entries()) {
+    if (e <= cél) return i + 1;
+  }
+  return 0; // ha a célt nem érte el Mari néni
+}
+
+// A tömb forEach metódusával: Nem lehet kilépni a forEach ciklusból return, vagy break utasítással!
+// Így a megoldás hibás!!!
+export function célElérve3(cél: number, mérések: number[]): number {
+  mérések.forEach((e, i) => {
+    if (e <= cél) return i + 1;
+  });
+  return 0; // ha a célt nem érte el Mari néni
+}
+
+// klasszikus növekményes (for) ciklussal
+export function célElérve4(cél: number, mérések: number[]): number {
+  for (let i = 0; i < mérések.length; i++) {
+    if (mérések[i] <= cél) return i + 1;
+  }
+  return 0; // ha a célt nem érte el Mari néni
+}
+
+export function ejnyeBejnyeHetekSzáma(mérések: number[]): number {
+  let hetekSzáma: number = 0;
+  for (let i = 0; i < mérések.length - 1; i++) {
+    if (mérések[i + 1] > mérések[i]) hetekSzáma++;
+  }
+  return hetekSzáma;
+}
 
 export default function HomePage() {
-  // Using Zustand global store for state management example
-  const { loggedUser, setLoggedUser } = useGlobalStore();
-  const { lightTheme, setLightTheme } = useGlobalStore();
-
-  useEffect(() => {
-    toast.success(`Render on: ${dayjs().format("YYYY.MM.DD HH:mm:ss")}`);
-  }); // no dependency array to demonstrate re-render toast
-
-  function handleThemeToggle() {
-    setLightTheme(!lightTheme);
-    document.documentElement.classList.toggle("dark", lightTheme);
-  }
-
+  const célTömeg: number = 93.5;
+  const mérések: number[] = [95.5, 94.3, 94.4, 93.3, 93.8, 92.9];
+  const elérve: number = célElérve4(célTömeg, mérések);
+  const ejnyeBejnye: number = ejnyeBejnyeHetekSzáma(mérések);
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200 py-2 dark:bg-gray-800">
-      <h1 className={clsx("mb-6 text-3xl font-bold", lightTheme ? "text-black" : "text-white")}>
-        {"Hello, "}
-        {loggedUser || (
-          <Image
-            alt="next logo"
-            className="inline p-2 dark:rounded-md dark:bg-white"
-            height={0}
-            src="next.svg"
-            width={110}
-          />
-        )}
-        ! 😎
-      </h1>
-      <input
-        className="input input-primary"
-        id="nameInput"
-        type="text"
-        value={loggedUser || ""}
-        onChange={(e) => setLoggedUser(e.target.value)}
-      />
-      <button className="btn mt-4 btn-primary" onClick={handleThemeToggle}>
-        <SunMoon className="mr-2" size={24} />
-        Toggle Theme
-      </button>
+    // font-mono -> Monospace betűtípus (azonos szélesek a karakterek)
+    // whitespace-pre -> vezérlő karakterek megtartása (\t, \n, kettő vagy több szóköz)
+    <div className="font-mono whitespace-pre">
+      <p>{`Hetek száma=${mérések.length}`}</p>
+      <p>{`Elérni kívánt testtömeg (kg)=${célTömeg}`}</p>
+      {/* Ciklus készítése JSX kódban */}
+      {/* e -> felveszi a tömb értékeit */}
+      {/* i -> felveszi a tömb indexeit */}
+      {/* a map metódus "iterál" */}
+      {/* key jellemző kötelező, szerepe az azonosítás */}
+      {mérések.map((e, i) => (
+        <p key={i}>
+          {i + 1}. héten={e}
+        </p>
+      ))}
+      {elérve == 0 ? (
+        <p>Sajnos Mari néni nem érte el a célját.</p>
+      ) : (
+        <p>Mari néni a(z) {elérve}. héten érte el a célt.</p>
+      )}
+      <p>A tömege {ejnyeBejnye} esetben nőtt egyik hétről a másikra.</p>
     </div>
   );
 }
