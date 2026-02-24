@@ -1,3 +1,5 @@
+Ez a repository a https://github.com/nits68/next-frontend-starter klónja
+
 # Next.js-frontend-starter
 
 A Next.js egy népszerű webfejlesztési (akár fullstack) keretrendszer, amely a React könyvtárra épül, és lehetővé teszi a szerveroldali renderelést, valamint statikus weboldalak generálását, ezáltal javítva a fejlesztési időt és a weboldalak teljesítményét.
@@ -299,7 +301,9 @@ Felugró toast üzenetekhez https://react-hot-toast.com/docs
 ```
 npm install react-hot-toast
 ```
+
 layout.tsx bővítése a Toaster elemmel:
+
 ```
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
@@ -327,6 +331,7 @@ export default function RootLayout({
 ```
 
 ## 5. Zustand global state management telepítése
+
 ```
 npm install zustand
 ```
